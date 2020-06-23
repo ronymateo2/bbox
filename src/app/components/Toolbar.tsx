@@ -9,7 +9,6 @@ interface ToolBarProps {
     onUndo: () => void
 }
 
-
 export default function ToolBar(props: ToolBarProps) {
     return (
         <Fragment>
