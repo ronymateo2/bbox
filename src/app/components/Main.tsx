@@ -61,21 +61,26 @@ const useStyles = makeStyles((theme) => ({
 
 interface MainProps {
     images: string[],
+    currentImg: string,
     rectangles: Rectangle[],
     onUndo: (id: string) => void,
     onRedo: (id: string) => void,
     onSumbit: (id: string) => void
-    onUpdate: (rects: Rectangle[], id: string) => void
+    onUpdate: (rects: Rectangle[], id: string) => void,
+    onPreviewChanged: (id: string) => void
 }
 
 export default function Main(props: MainProps) {
     const classes = useStyles();
-    const [currentImg, setCurrentImg] = React.useState<string>('');
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const rectangles = props.rectangles;
+    const currentImg = props.currentImg;
+
+    const disabledUndo = false;
+    const disabeldRedo = false;
 
     function onPreviewChanged(img: string) {
-        setCurrentImg(img)
+        props.onPreviewChanged(img)
     }
 
     function onUndo() {
@@ -107,7 +112,7 @@ export default function Main(props: MainProps) {
                         {/* MainView */}
                         <Grid item xs={12} md={8} lg={9}>
                             <Paper className={fixedHeightPaper}>
-                                <ToolBar onUndo={onUndo} onRedo={onRedo} ></ToolBar>
+                                <ToolBar onUndo={onUndo} onRedo={onRedo} disabeldRedo={disabeldRedo} disabledUndo={disabledUndo} ></ToolBar>
                                 <Viewer img={currentImg} rectanges={rectangles} updateRectanges={updateRectanges} ></Viewer>
                             </Paper>
                         </Grid>

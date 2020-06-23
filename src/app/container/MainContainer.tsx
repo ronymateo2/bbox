@@ -10,12 +10,15 @@ export default function MainContainer() {
   const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [rectangles, setRectangles] = React.useState<Rectangle[]>([]);
+  const [currentImg, setCurrentImg] = React.useState<string>('');
+
 
   useEffect(() => {
     const getImages = async () => {
       setIsLoading(true);
       try {
         const images = await imageService.getImages();
+        setCurrentImg(images[0]) // TODO validation in case no images
         setImages(images)
 
       } catch (error) {
@@ -41,6 +44,11 @@ export default function MainContainer() {
   function onSumbit() {
 
 
+
+  }
+
+
+  function onPreviewChanged() {
 
   }
 
@@ -71,7 +79,17 @@ export default function MainContainer() {
 
   return (
     <div>
-      {!isLoading && (<Main rectangles={rectangles} images={images} onRedo={onRedo} onUndo={onUndo} onUpdate={onUpdate} onSumbit={onSumbit}></Main>)}
+      {!isLoading && (<Main
+        rectangles={rectangles}
+        images={images}
+        onRedo={onRedo}
+        onUndo={onUndo}
+        onUpdate={onUpdate}
+        onSumbit={onSumbit}
+        currentImg={currentImg}
+        onPreviewChanged={onPreviewChanged}
+
+      ></Main>)}
     </div>
   )
 }

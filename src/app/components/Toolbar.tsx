@@ -8,6 +8,9 @@ import RedoIcon from '@material-ui/icons/Redo';
 interface ToolBarProps {
     onUndo: () => void
     onRedo: () => void
+    disabledUndo: boolean,
+    disabeldRedo: boolean
+
 }
 
 export default function ToolBar(props: ToolBarProps) {
@@ -15,11 +18,11 @@ export default function ToolBar(props: ToolBarProps) {
         <Fragment>
             <Title>Toolbar</Title>
             <div>
-                <IconButton>
-                    <UndoIcon onClick={props.onUndo} />
+                <IconButton disabled={props.disabledUndo} onClick={props.onUndo} >
+                    <UndoIcon />
                 </IconButton>
-                <IconButton>
-                    <RedoIcon onClick={props.onRedo} />
+                <IconButton disabled={props.disabeldRedo} onClick={props.onRedo}>
+                    <RedoIcon  />
                 </IconButton>
             </div>
             <Divider></Divider>
