@@ -24,3 +24,11 @@ export const add = (box: Box) => {
     }
 }
 
+export const update = (box: Box) => {
+    return {
+        type: 'UPDATE',
+        id: box.url,
+        box
+    }
+}
+

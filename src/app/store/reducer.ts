@@ -1,7 +1,7 @@
 import { AppState } from "../model/appState"
 import { initialState } from "./store";
 
-export function undoable(state: AppState = initialState, action: any) : AppState {
+export function undoable(state: AppState = initialState, action: any): AppState {
     const boxes = state.boxes;
     switch (action.type) {
         case 'UNDO': {
@@ -41,9 +41,18 @@ export function undoable(state: AppState = initialState, action: any) : AppState
         case 'ADD':
             return {
                 boxes: [...boxes, action.box]
-            }; 
+            };
+        case 'UPDATE': {
+            const index = boxes.findIndex(b => b.url = action.id)
+            const newBoxes = [...boxes]
+            newBoxes.splice(index, 1)
+
+            return {
+                boxes: [...newBoxes, action.box]
+            }
+        }
         default:
             return state
-            
+
     }
 }

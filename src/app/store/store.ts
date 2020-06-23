@@ -7,4 +7,5 @@ export const initialState: AppState = {
     boxes: [] as Box[]
 }
 
-export const store = createStore(undoable)
+export const store = createStore(undoable,  (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+)

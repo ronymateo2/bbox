@@ -13,9 +13,9 @@ import Preview from './Preview';
 import Footer from './Footer';
 import { AppBar, Toolbar } from '@material-ui/core';
 import { Rectangle } from '../model/rectangle';
-import { useSelector, useDispatch } from 'react-redux'
-import { AppState } from '../model/appState'
-import { add, redo, undo } from '../store/actions'
+import { useDispatch } from 'react-redux'
+import { add, update, redo, undo } from '../store/actions'
+import { store } from '../store/store'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -71,7 +71,6 @@ export default function Main(props: MainProps) {
     const classes = useStyles();
     const [currentImg, setCurrentImg] = React.useState<string>('');
     const [rectangles, setRectangles] = React.useState<Rectangle[]>([]);
-    const boxes = useSelector((state: AppState) => state.boxes)
     const dispatch = useDispatch();
 
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -82,17 +81,39 @@ export default function Main(props: MainProps) {
     }
 
     function onUndo() {
-        setRectangles(rectangles.slice(0, -1).map(r => ({ ...r })))
+        dispatch(undo(currentImg))
+        const box = store.getState().boxes.find(b => b.url == currentImg)
+        setRectangles([...box!.past, box!.present])
+
+    }
+
+    function onRedo() {
+        dispatch(redo(currentImg))
+        const box = store.getState().boxes.find(b => b.url == currentImg)
+        setRectangles([...box!.past, box!.present])
     }
 
     function updateRectanges(news: Rectangle[]) {
         setRectangles(news.map(r => ({ ...r })))
-        if (!boxes.find(b => b.url === currentImg)) {
+        const box = store.getState().boxes.find(b => b.url == currentImg)
+        if (!box) {
+            const newPast = news.slice(0, news.length - 1)
             dispatch(add({
                 url: currentImg,
                 future: [],
-                past: [],
+                past: newPast,
                 present: news[news.length - 1]
+            }))
+        }
+        else {
+            const present = news[news.length - 1]
+            const newPast = news.slice(0, news.length - 1)
+
+            dispatch(update({
+                url: currentImg,
+                future: [],
+                past: newPast,
+                present: present
             }))
         }
     }
@@ -114,7 +135,7 @@ export default function Main(props: MainProps) {
                         {/* MainView */}
                         <Grid item xs={12} md={8} lg={9}>
                             <Paper className={fixedHeightPaper}>
-                                <ToolBar onUndo={onUndo} ></ToolBar>
+                                <ToolBar onUndo={onUndo} onRedo={onRedo} ></ToolBar>
                                 <Viewer img={currentImg} rectanges={rectangles} updateRectanges={updateRectanges} ></Viewer>
                             </Paper>
                         </Grid>

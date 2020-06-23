@@ -7,6 +7,7 @@ import RedoIcon from '@material-ui/icons/Redo';
 
 interface ToolBarProps {
     onUndo: () => void
+    onRedo: () => void
 }
 
 export default function ToolBar(props: ToolBarProps) {
@@ -18,7 +19,7 @@ export default function ToolBar(props: ToolBarProps) {
                     <UndoIcon onClick={props.onUndo} />
                 </IconButton>
                 <IconButton>
-                    <RedoIcon />
+                    <RedoIcon onClick={props.onRedo} />
                 </IconButton>
             </div>
             <Divider></Divider>
