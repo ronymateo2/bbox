@@ -13,6 +13,9 @@ import Preview from './Preview';
 import Footer from './Footer';
 import { AppBar, Toolbar } from '@material-ui/core';
 import { Rectangle } from '../model/rectangle';
+import { useSelector, useDispatch } from 'react-redux'
+import { AppState } from '../model/appState'
+import { add, redo, undo } from '../store/actions'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -68,7 +71,8 @@ export default function Main(props: MainProps) {
     const classes = useStyles();
     const [currentImg, setCurrentImg] = React.useState<string>('');
     const [rectangles, setRectangles] = React.useState<Rectangle[]>([]);
-
+    const boxes = useSelector((state: AppState) => state.boxes)
+    const dispatch = useDispatch();
 
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -83,6 +87,14 @@ export default function Main(props: MainProps) {
 
     function updateRectanges(news: Rectangle[]) {
         setRectangles(news.map(r => ({ ...r })))
+        if (!boxes.find(b => b.url === currentImg)) {
+            dispatch(add({
+                url: currentImg,
+                future: [],
+                past: [],
+                present: news[news.length - 1]
+            }))
+        }
     }
 
     return (
