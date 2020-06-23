@@ -11,6 +11,7 @@ import ToolBar from './Toolbar';
 import Viewer from './Viewer';
 import Preview from './Preview';
 import Footer from './Footer';
+import Log from './Log'
 import { AppBar, Toolbar } from '@material-ui/core';
 import { Rectangle } from '../model/rectangle';
 import { Box as BoxModel, canRedo, candUndo } from '../model/box';
@@ -62,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface MainProps {
+    boxes: BoxModel[]
     box: BoxModel,
     images: string[],
     currentImg: string,
@@ -126,10 +128,11 @@ export default function Main(props: MainProps) {
                             </Paper>
                         </Grid>
                         {/* Recent Submmited */}
-                        {/* <Grid item xs={12}>
-              <Paper className={classes.paper}>
-              </Paper>
-            </Grid> */}
+                        <Grid item xs={12}>
+                            <Paper className={classes.paper}>
+                                <Log list={props.boxes}></Log>
+                            </Paper>
+                        </Grid>
                     </Grid>
                     <Box pt={4}>
                         <Footer />

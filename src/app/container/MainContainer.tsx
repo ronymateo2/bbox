@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { imageService } from '../services/image-service'
 import Main from '../components/Main'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { add, update, redo, undo } from '../store/actions'
 import { store } from '../store/store'
 import { Rectangle } from '../model/rectangle';
 import { Box } from '../model/box';
+import { AppState } from '../model/appState';
 export default function MainContainer() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -13,6 +14,7 @@ export default function MainContainer() {
   const [rectangles, setRectangles] = React.useState<Rectangle[]>([]);
   const [currentImg, setCurrentImg] = React.useState<string>('');
   const [box, setBox] = React.useState<Box>();
+  const boxes = useSelector((state : AppState) => state.boxes)
 
   useEffect(() => {
     const getImages = async () => {
@@ -50,11 +52,20 @@ export default function MainContainer() {
 
 
   function onSumbit() {
+
   }
 
-
   function onPreviewChanged(img: string) {
+    debugger;
     setCurrentImg(img) // TODO: validation in case no images
+    const box = getBox(img)
+    if(box){
+      setRectangles([...box!.past, box!.present])
+      setBox(box)
+    }else{
+      setRectangles([])
+      setBox(undefined)
+    }
   }
 
   function onUpdate(news: Rectangle[], currentImg: string) {
@@ -93,6 +104,7 @@ export default function MainContainer() {
         onUpdate={onUpdate}
         onSumbit={onSumbit}
         box={box!}
+        boxes= {boxes}
         currentImg={currentImg}
         onPreviewChanged={onPreviewChanged}
 
