@@ -13,6 +13,8 @@ import Preview from './Preview';
 import Footer from './Footer';
 import { AppBar, Toolbar } from '@material-ui/core';
 import { Rectangle } from '../model/rectangle';
+import { Box as BoxModel, canRedo, candUndo } from '../model/box';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -60,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface MainProps {
+    box: BoxModel,
     images: string[],
     currentImg: string,
     rectangles: Rectangle[],
@@ -76,8 +79,8 @@ export default function Main(props: MainProps) {
     const rectangles = props.rectangles;
     const currentImg = props.currentImg;
 
-    const disabledUndo = false;
-    const disabeldRedo = false;
+    const disabledUndo = !candUndo(props.box);
+    const disabeldRedo = !canRedo(props.box);
 
     function onPreviewChanged(img: string) {
         props.onPreviewChanged(img)
