@@ -13,9 +13,6 @@ import Preview from './Preview';
 import Footer from './Footer';
 import { AppBar, Toolbar } from '@material-ui/core';
 import { Rectangle } from '../model/rectangle';
-import { useDispatch } from 'react-redux'
-import { add, update, redo, undo } from '../store/actions'
-import { store } from '../store/store'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -62,60 +59,35 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 interface MainProps {
-    images: string[]
+    images: string[],
+    rectangles: Rectangle[],
+    onUndo: (id: string) => void,
+    onRedo: (id: string) => void,
+    onSumbit: (id: string) => void
+    onUpdate: (rects: Rectangle[], id: string) => void
 }
 
 export default function Main(props: MainProps) {
     const classes = useStyles();
     const [currentImg, setCurrentImg] = React.useState<string>('');
-    const [rectangles, setRectangles] = React.useState<Rectangle[]>([]);
-    const dispatch = useDispatch();
-
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const rectangles = props.rectangles;
 
     function onPreviewChanged(img: string) {
         setCurrentImg(img)
-        setRectangles([])
     }
 
     function onUndo() {
-        dispatch(undo(currentImg))
-        const box = store.getState().boxes.find(b => b.url == currentImg)
-        setRectangles([...box!.past, box!.present])
-
+        props.onUndo(currentImg)
     }
 
     function onRedo() {
-        dispatch(redo(currentImg))
-        const box = store.getState().boxes.find(b => b.url == currentImg)
-        setRectangles([...box!.past, box!.present])
+        props.onRedo(currentImg)
     }
 
     function updateRectanges(news: Rectangle[]) {
-        setRectangles(news.map(r => ({ ...r })))
-        const box = store.getState().boxes.find(b => b.url == currentImg)
-        if (!box) {
-            const newPast = news.slice(0, news.length - 1)
-            dispatch(add({
-                url: currentImg,
-                future: [],
-                past: newPast,
-                present: news[news.length - 1]
-            }))
-        }
-        else {
-            const present = news[news.length - 1]
-            const newPast = news.slice(0, news.length - 1)
-
-            dispatch(update({
-                url: currentImg,
-                future: [],
-                past: newPast,
-                present: present
-            }))
-        }
+        props.onUpdate(news, currentImg)
     }
 
     return (

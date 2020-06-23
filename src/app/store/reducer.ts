@@ -46,7 +46,6 @@ export function undoable(state: AppState = initialState, action: any): AppState 
             const index = boxes.findIndex(b => b.url = action.id)
             const newBoxes = [...boxes]
             newBoxes.splice(index, 1)
-
             return {
                 boxes: [...newBoxes, action.box]
             }
