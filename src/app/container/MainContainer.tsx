@@ -7,6 +7,7 @@ import { store } from '../store/store'
 import { Rectangle } from '../model/rectangle';
 import { Box } from '../model/box';
 import { AppState } from '../model/appState';
+import { clone } from '../utils/utils'
 export default function MainContainer() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +15,8 @@ export default function MainContainer() {
   const [rectangles, setRectangles] = React.useState<Rectangle[]>([]);
   const [currentImg, setCurrentImg] = React.useState<string>('');
   const [box, setBox] = React.useState<Box>();
-  const boxes = useSelector((state : AppState) => state.boxes)
+  const boxes = useSelector((state: AppState) => state.boxes)
+  const [log, setLog] = useState<Box[]>([]);
 
   useEffect(() => {
     const getImages = async () => {
@@ -32,8 +34,8 @@ export default function MainContainer() {
     getImages();
   }, [])
 
-  function getBox(id: string) {
-    return store.getState().boxes.find(b => b.url == id)
+  function getBox(id: string): Box {
+    return store.getState().boxes.find(b => b.url == id)!
   }
 
   function onRedo(currentImg: string) {
@@ -51,18 +53,21 @@ export default function MainContainer() {
   }
 
 
-  function onSumbit() {
-
+  function onSumbit(currentImg: string) {
+    // presist
+    const box = getBox(currentImg)
+    if (box) {
+      setLog(clone([box, ...log]))
+    }
   }
 
   function onPreviewChanged(img: string) {
-    debugger;
     setCurrentImg(img) // TODO: validation in case no images
     const box = getBox(img)
-    if(box){
+    if (box) {
       setRectangles([...box!.past, box!.present])
       setBox(box)
-    }else{
+    } else {
       setRectangles([])
       setBox(undefined)
     }
@@ -104,7 +109,8 @@ export default function MainContainer() {
         onUpdate={onUpdate}
         onSumbit={onSumbit}
         box={box!}
-        boxes= {boxes}
+        boxes={boxes}
+        log = {log}
         currentImg={currentImg}
         onPreviewChanged={onPreviewChanged}
 

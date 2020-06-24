@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme)=>({
 interface PreviewProps {
     imgList : string[],
     onChanged : (img: string) => void
+    onSubmit: () => void
 }
 
 export default function Preview(props : PreviewProps) {
@@ -41,7 +42,7 @@ export default function Preview(props : PreviewProps) {
             </div>
             <Divider></Divider>
             <Box m={3} justifyContent="center" display="flex">
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={props.onSubmit}>
                     SUBMIT
                 </Button>
             </Box>

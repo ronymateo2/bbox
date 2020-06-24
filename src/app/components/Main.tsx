@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 interface MainProps {
     boxes: BoxModel[]
     box: BoxModel,
+    log: BoxModel[]
     images: string[],
     currentImg: string,
     rectangles: Rectangle[],
@@ -100,6 +101,10 @@ export default function Main(props: MainProps) {
         props.onUpdate(news, currentImg)
     }
 
+    function onSubmit(){
+        props.onSumbit(currentImg)
+    }
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -124,13 +129,13 @@ export default function Main(props: MainProps) {
                         {/* Preview */}
                         <Grid item xs={12} md={4} lg={3}>
                             <Paper className={fixedHeightPaper}>
-                                <Preview onChanged={onPreviewChanged} imgList={props.images}></Preview>
+                                <Preview onChanged={onPreviewChanged} imgList={props.images}  onSubmit={onSubmit}></Preview>
                             </Paper>
                         </Grid>
                         {/* Recent Submmited */}
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
-                                <Log list={props.boxes}></Log>
+                                <Log list={props.log}></Log>
                             </Paper>
                         </Grid>
                     </Grid>

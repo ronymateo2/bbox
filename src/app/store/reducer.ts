@@ -5,10 +5,10 @@ export function undoable(state: AppState = initialState, action: any): AppState 
     const boxes = state.boxes;
     switch (action.type) {
         case 'UNDO': {
-            const { past, present, future } = boxes.filter(s => s.url = action.id)[0]
+            const { past, present, future } = boxes.filter(s => s.url == action.id)[0]
             const previous = past[past.length - 1]
             const newPast = past.slice(0, past.length - 1)
-            const index = boxes.findIndex(b => b.url = action.id)
+            const index = boxes.findIndex(b => b.url == action.id)
             const newBoxes = [...boxes]
             newBoxes.splice(index, 1)
             newBoxes.push({
@@ -22,10 +22,10 @@ export function undoable(state: AppState = initialState, action: any): AppState 
             }
         }
         case 'REDO': {
-            const { past, present, future } = boxes.filter(s => s.url = action.id)[0]
+            const { past, present, future } = boxes.filter(s => s.url == action.id)[0]
             const next = future[0]
             const newFuture = future.slice(1)
-            const index = boxes.findIndex(b => b.url = action.id)
+            const index = boxes.findIndex(b => b.url == action.id)
             const newBoxes = [...boxes]
             newBoxes.splice(index, 1)
             newBoxes.push({
@@ -43,7 +43,6 @@ export function undoable(state: AppState = initialState, action: any): AppState 
                 boxes: [...boxes, action.box]
             };
         case 'UPDATE': {
-            debugger;
             const index = boxes.findIndex(b => b.url == action.id)
             const newBoxes = [...boxes]
             newBoxes.splice(index, 1)

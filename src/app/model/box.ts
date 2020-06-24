@@ -22,3 +22,4 @@ export function apiFormater(box: Box) {
         boundingBoxes: [...box.past, box.present]
     })
 }
+
