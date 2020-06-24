@@ -4,11 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-## Project setup
-
-```
-npm install
-```
+### Project setup `npm install`
 
 ### `npm start`
 
@@ -18,7 +14,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
-# Bounding box
+### Bounding box
 Features:
 
 - [x] Loading images from API(using a proxy middleware due to CORS issues)
@@ -29,14 +25,14 @@ Features:
 - [x] Log implemented to see what are we sending to the API
 
 
-## Decision
+### Decision
 
 - Use react +  redux + material-ui as a system design
 - Use Redux to save the state of the application
 - Mock data for rapid prototyping
 - Responsive Design comes with material-ui (it provides a decent responsive design)
 
-## Architecture
+### Architecture
 
 - Containers has interaction with Redux and any services (api services)
 - services contain all interaction with any rest API here it's possible to have more like auth, etc.
