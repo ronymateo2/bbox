@@ -13,5 +13,12 @@ export function canRedo(box: Box) {
 }
 
 export function candUndo(box: Box) {
-    return box && ( box.past.length > 0 || box.present)
+    return box && (box.past.length > 0 || box.present)
+}
+
+export function apiFormater(box: Box) {
+    return JSON.stringify({
+        imageUrl: box.url,
+        boundingBoxes: [...box.past, box.present]
+    })
 }
