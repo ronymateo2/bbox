@@ -40,21 +40,21 @@ export default function MainContainer() {
 
   function onRedo(currentImg: string) {
     dispatch(redo(currentImg))
-    const box = getBox(currentImg)
-    setRectangles([...box!.past, box!.present])
-    setBox(box)
+    setBoxState(currentImg);
+  }
+
+  function setBoxState(currentImg: string) {
+    const box = getBox(currentImg);
+    setRectangles([...box!.past, box!.present]);
+    setBox(box);
   }
 
   function onUndo(currentImg: string) {
     dispatch(undo(currentImg))
-    const box = getBox(currentImg)
-    setRectangles([...box!.past, box!.present])
-    setBox(box)
+    setBoxState(currentImg);
   }
 
-
   function onSumbit(currentImg: string) {
-    // presist
     const box = getBox(currentImg)
     if (box) {
       setLog(clone([box, ...log]))
